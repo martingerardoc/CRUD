@@ -3,7 +3,9 @@ import useAxios from "../hooks/useAxios";
 
 export default function Navbar({ abierto, setAbierto }) {
   const { user, logout } = useAuth();
-  const { data: curso, loading } = useAxios(`/courses/${user.course_id}`);
+  const { data: curso, loading } = useAxios(
+  user?.course_id ? `/courses/${user.course_id}` : null
+);
 
   
   if (!user) return null;
