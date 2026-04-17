@@ -14,7 +14,7 @@ export default function UsuariosCards() {
 
   const navigate = useNavigate();
 
-  const { data, loading, error, request } = useAxios("/users/", {
+  const { data, loading, error, request } = useAxios("/users", {
     params: { page, page_size: pageSize },
   });
   const {
