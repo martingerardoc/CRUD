@@ -51,10 +51,12 @@ const useAxios = (url, options = {}) => {
   );
 
   useEffect(() => {
-    if (auto && method.toUpperCase() === "GET") {
-      request();
-    }
-  }, [auto, method, request]);
+  if (!url) return; // 🚨 ESTA LÍNEA ES LA SOLUCIÓN
+
+  if (auto && method.toUpperCase() === "GET") {
+    request();
+  }
+}, [url, auto, method, request]);
 
   return { data, loading, error, request };
 };
