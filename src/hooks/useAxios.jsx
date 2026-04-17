@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { instance } from "../api.js";
+import { useCookies } from "react-cookie";
 
 const useAxios = (url, options = {}) => {
   const {
@@ -10,6 +11,8 @@ const useAxios = (url, options = {}) => {
     params = {},
   } = options;
 
+  const [cookies] = useCookies(["token"]);
+
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(
     method === "GET" && auto ? true : false
@@ -18,7 +21,6 @@ const useAxios = (url, options = {}) => {
 
   const request = useCallback(
     async (config = {}) => {
-      // 🚨 Si no hay URL, no hacer request
       const finalUrl = config.url || url;
       if (!finalUrl) return;
 
@@ -31,8 +33,7 @@ const useAxios = (url, options = {}) => {
           ? config.body
           : body;
 
-        // 🔐 Obtener token
-        const token = localStorage.getItem("token");
+        const token = cookies.token;
 
         const { data } = await instance({
           method: finalMethod,
@@ -62,11 +63,11 @@ const useAxios = (url, options = {}) => {
       JSON.stringify(body),
       JSON.stringify(params),
       JSON.stringify(headers),
+      cookies.token,
     ]
   );
 
   useEffect(() => {
-    // 🚨 Evitar llamadas con URL null
     if (!url) return;
 
     if (auto && method.toUpperCase() === "GET") {
