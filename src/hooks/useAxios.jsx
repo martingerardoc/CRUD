@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { instance } from "../api.js";
-import { useCookies } from "react-cookie";
 
 const useAxios = (url, options = {}) => {
   const {
@@ -10,8 +9,6 @@ const useAxios = (url, options = {}) => {
     auto = true,
     params = {},
   } = options;
-
-  const [cookies] = useCookies(["token"]);
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(
@@ -33,7 +30,8 @@ const useAxios = (url, options = {}) => {
           ? config.body
           : body;
 
-        const token = cookies.token;
+        // 🔐 TOKEN DESDE LOCALSTORAGE
+        const token = localStorage.getItem("token");
 
         const { data } = await instance({
           method: finalMethod,
@@ -63,7 +61,6 @@ const useAxios = (url, options = {}) => {
       JSON.stringify(body),
       JSON.stringify(params),
       JSON.stringify(headers),
-      cookies.token,
     ]
   );
 
