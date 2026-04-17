@@ -6,7 +6,7 @@ export const instance = axios.create({
     "Content-Type": "application/json",
     accept: "application/json",
   },
-  withCredentials: true,
+  /* withCredentials: true, */
 });
 
 instance.interceptors.request.use((config) => {
